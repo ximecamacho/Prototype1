@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public InputAction MoveAction;
 
     public InputAction JumpAction;
-    private float jumpForce = 3;
+    private float jumpForce = 20;
     private Rigidbody2D rb;
 
     private bool isGrounded;
@@ -34,21 +34,21 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
     
 
         Vector2 move = MoveAction.ReadValue<Vector2>();
-        if (JumpAction.IsInProgress() && GetIsGrounded())
+        if (JumpAction.IsPressed() && GetIsGrounded())
         {
             Jump();
         }
-        Vector2 position_ = (Vector2)transform.position + move * 0.01f;
+        Vector2 position_ = (Vector2)transform.position + move * 0.2f;
         transform.position = position_;
     }
 
     private bool GetIsGrounded(){
-        return  Physics2D.Raycast(transform.position, Vector2.down, 1.5f, LayerMask.GetMask("Ground"));
+        return  Physics2D.Raycast(transform.position, Vector2.down, 0.6f, LayerMask.GetMask("Ground"));
 
     }
 
@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Force);
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 
     }
 }
