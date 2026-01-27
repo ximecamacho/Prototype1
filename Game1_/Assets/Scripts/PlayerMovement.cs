@@ -67,6 +67,11 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 0;
 
         }
+        else if (other.gameObject.CompareTag("Floor"))
+        {
+            loseTextObject.SetActive(true);
+            Time.timeScale = 0;
+        }
         else if (other.gameObject.CompareTag("GoodItem"))
         {
             other.gameObject.SetActive(false);
@@ -88,7 +93,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     private bool GetIsGrounded(){
-        return  Physics2D.Raycast(transform.position, Vector2.down, 0.6f, LayerMask.GetMask("Ground"));
+        return  Physics2D.Raycast(transform.position, Vector2.down, 0.6f, LayerMask.GetMask("Ground"))
+        || Physics2D.Raycast(transform.position, Vector2.down, 0.6f, LayerMask.GetMask("Platform"));
 
     }
 

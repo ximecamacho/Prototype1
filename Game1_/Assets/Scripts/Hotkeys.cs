@@ -25,6 +25,7 @@ public class Hotkeys : MonoBehaviour
 
     void Reload()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
