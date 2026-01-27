@@ -12,7 +12,10 @@ https://youtu.be/92DYkgBJBBo?si=OQK8xJwVJk-HmUNs
 -for jump
 
 https://learn.unity.com/course/roll-a-ball/tutorial/displaying-score-and-text?version=6.3
--for good and bad items
+-for good and bad items, score
+
+https://discussions.unity.com/t/how-to-freeze-and-unfreeze-my-game/311091
+-pausing game
 */
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
 
     public InputAction JumpAction;
     public TextMeshProUGUI scoreText;
+    public GameObject winTextObject;
+     public GameObject loseTextObject;
     private float jumpForce = 20;
     private Rigidbody2D rb;
 
@@ -33,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
         JumpAction.Enable();
         count = 0;
         SetScoreText();
+        winTextObject.SetActive(false);
+        loseTextObject.SetActive(false);
 
 
     }
@@ -50,23 +57,34 @@ public class PlayerMovement : MonoBehaviour
         transform.position = position_;
     }
 
-    void OnTriggerEnter2D(Collider2D other){
-        if (other.gameObject.CompareTag("GoodItem")){
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.gameObject.CompareTag("BadItem"))
+        {
+            other.gameObject.SetActive(false);
+            loseTextObject.SetActive(true);
+            Time.timeScale = 0;
+
+        }
+        else if (other.gameObject.CompareTag("GoodItem"))
+        {
             other.gameObject.SetActive(false);
             count++;
             SetScoreText();
-
-        }
-        else if (other.gameObject.CompareTag("BadItem")){
-            other.gameObject.SetActive(false);
 
         }
         
 
         
     }
-    void SetScoreText(){
+    void SetScoreText()
+    {
         scoreText.text = "Score: " + count.ToString();
+        if (count >= 5)
+        {
+             winTextObject.SetActive(true);
+        }
     }
     private bool GetIsGrounded(){
         return  Physics2D.Raycast(transform.position, Vector2.down, 0.6f, LayerMask.GetMask("Ground"));
