@@ -84,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         if (count >= 5)
         {
              winTextObject.SetActive(true);
+             Time.timeScale = 0f;
         }
     }
     private bool GetIsGrounded(){
