@@ -28,12 +28,20 @@ public class PlayerMovement : MonoBehaviour
     private float jumpForce = 20;
     private Rigidbody2D rb;
 
+    private AudioSource audioSource;
+
+    public AudioClip jumpSound;
+    public AudioClip collectSound;
+    public AudioClip dieSound1;
+    public AudioClip dieSound2;
+
     private int count;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         MoveAction.Enable();
         JumpAction.Enable();
         count = 0;
@@ -62,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("BadItem"))
         {
+            audioSource.PlayOneShot(dieSound1);
+            // audioSource.PlayOneShot(dieSound2);
             other.gameObject.SetActive(false);
             loseTextObject.SetActive(true);
             Time.timeScale = 0;
@@ -69,11 +79,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Floor"))
         {
+            audioSource.PlayOneShot(dieSound1);
+            audioSource.PlayOneShot(dieSound2);
             loseTextObject.SetActive(true);
             Time.timeScale = 0;
         }
         else if (other.gameObject.CompareTag("GoodItem"))
         {
+            audioSource.PlayOneShot(collectSound);
             other.gameObject.SetActive(false);
             count++;
             SetScoreText();
@@ -105,6 +118,6 @@ public class PlayerMovement : MonoBehaviour
     private void Jump()
     {
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-
+        audioSource.PlayOneShot(jumpSound);
     }
 }
