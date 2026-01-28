@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     private float jumpForce = 20;
     private Rigidbody2D rb;
 
+    private ParticleSystem particleSystem;
+
     private AudioSource audioSource;
 
     public AudioClip jumpSound;
@@ -35,12 +37,15 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip dieSound1;
     public AudioClip dieSound2;
 
+    
+
     private int count;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        particleSystem = GetComponent<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
         MoveAction.Enable();
         JumpAction.Enable();
@@ -70,19 +75,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (other.gameObject.CompareTag("BadItem"))
         {
+            particleSystem.Play();
             audioSource.PlayOneShot(dieSound1);
             // audioSource.PlayOneShot(dieSound2);
             other.gameObject.SetActive(false);
             loseTextObject.SetActive(true);
-            Time.timeScale = 0;
+            Time.timeScale = 0.2f;
 
         }
         else if (other.gameObject.CompareTag("Floor"))
         {
+            particleSystem.Play();
             audioSource.PlayOneShot(dieSound1);
             audioSource.PlayOneShot(dieSound2);
             loseTextObject.SetActive(true);
-            Time.timeScale = 0;
+            Time.timeScale = 0.2f;
         }
         else if (other.gameObject.CompareTag("GoodItem"))
         {
